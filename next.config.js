@@ -11,17 +11,8 @@ const nextConfig = {
         path: false,
         crypto: false,
       };
-
-      // Alias onnxruntime-node to mock file on client side
-      config.resolve.alias['onnxruntime-node'] = path.join(__dirname, 'lib/onnx/mock-onnxruntime-node.js');
-    } else {
-      // Server-side: ignore onnxruntime-web to prevent build errors
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'onnxruntime-web': false,
-      };
     }
-    
+
     // Copy ONNX models to public folder
     config.module.rules.push({
       test: /\.onnx$/,
@@ -42,7 +33,7 @@ const nextConfig = {
   },
   // Enable experimental features for WebAssembly
   experimental: {
-    serverComponentsExternalPackages: ['onnxruntime-node'],
+    serverComponentsExternalPackages: [],
     serverActions: {
       bodySizeLimit: '2mb',
     },

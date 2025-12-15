@@ -31,7 +31,8 @@ export class ONNXModelLoader {
         // Server Side
         const fs = (await import('fs')).promises;
         const path = (await import('path')).default;
-        const ort = (await import('onnxruntime-node'));
+        // Use onnxruntime-web with WASM backend on server to reduce bundle size
+        const ort = (await import('onnxruntime-web'));
 
         const metadataPath = path.join(process.cwd(), 'public', 'models', 'model_metadata.json');
         const metadataContent = await fs.readFile(metadataPath, 'utf-8');
@@ -44,7 +45,9 @@ export class ONNXModelLoader {
         const relativePath = modelMeta.path.startsWith('/') ? modelMeta.path.slice(1) : modelMeta.path;
         const modelPath = path.join(process.cwd(), 'public', relativePath);
         
-        session = await ort.InferenceSession.create(modelPath);
+        // Read model file as buffer for WASM backend
+        const modelBuffer = await fs.readFile(modelPath);
+        session = await ort.InferenceSession.create(modelBuffer);
       } else {
         // Client Side
         const ort = (await import('onnxruntime-web'));
@@ -82,7 +85,7 @@ export class ONNXModelLoader {
       let results;
 
       if (typeof window === 'undefined') {
-        const ort = (await import('onnxruntime-node'));
+        const ort = (await import('onnxruntime-web'));
         inputTensor = new ort.Tensor('float32', inputData, inputShape);
         feeds = { [session.inputNames[0]]: inputTensor };
         results = await session.run(feeds);
