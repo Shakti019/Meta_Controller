@@ -33,9 +33,15 @@ const nextConfig = {
   },
   // Enable experimental features for WebAssembly
   experimental: {
-    serverComponentsExternalPackages: [],
+    serverComponentsExternalPackages: ['onnxruntime-node', 'onnxruntime-web'],
     serverActions: {
       bodySizeLimit: '2mb',
+    },
+    outputFileTracingExcludes: {
+      '*': [
+        './node_modules/onnxruntime-node/bin/**/*',
+        './public/models/**/*',
+      ],
     },
   },
   async headers() {
