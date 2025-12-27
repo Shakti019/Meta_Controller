@@ -42,11 +42,17 @@ export class ONNXModelLoader {
         if (!modelMeta) throw new Error(`Model ${modelName} not found in metadata`);
         this.metadata.set(modelName, modelMeta);
 
-        const relativePath = modelMeta.path.startsWith('/') ? modelMeta.path.slice(1) : modelMeta.path;
-        const modelPath = path.join(process.cwd(), 'public', relativePath);
+        // FIX: Use fetch for large model files to avoid bundling them in the serverless function
+        // This prevents the "Serverless Function has exceeded 250MB" error
+        const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+        const modelUrl = `${baseUrl}${modelMeta.path}`;
         
-        // Read model file as buffer for WASM backend
-        const modelBuffer = await fs.readFile(modelPath);
+        console.log(`Fetching model from: ${modelUrl}`);
+        const response = await fetch(modelUrl);
+        if (!response.ok) throw new Error(`Failed to fetch model from ${modelUrl}: ${response.statusText}`);
+        const modelBuffer = await response.arrayBuffer();
+        
+        // Create session from buffer
         session = await ort.InferenceSession.create(modelBuffer);
       } else {
         // Client Side
