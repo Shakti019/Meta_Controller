@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { AuthProvider } from '@/components/AuthProvider'
 import { NavBar } from '@/components/NavBar'
 import Sidebar from '@/components/Sidebar'
+import { DeviceRestrictionWrapper } from '@/components/DeviceRestrictionWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,13 +22,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <NavBar />
-          <div className="flex min-h-screen bg-gray-50">
-            <Sidebar />
-            <main className="flex-1 overflow-auto">
-              {children}
-            </main>
-          </div>
+          <DeviceRestrictionWrapper>
+            <NavBar />
+            <div className="flex min-h-screen bg-gray-50">
+              <Sidebar />
+              <main className="flex-1 overflow-auto">
+                {children}
+              </main>
+            </div>
+          </DeviceRestrictionWrapper>
         </AuthProvider>
       </body>
     </html>
