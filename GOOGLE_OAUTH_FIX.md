@@ -31,22 +31,7 @@ GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxx
    - If you can't see it, click "Reset Secret" to generate a new one
    - Copy the secret that starts with `GOCSPX-`
 
-### Step 3: Update .env.local
-
-Your `.env.local` should look like this:
-
-```env
-# Database
-MONGODB_URI=mongodb+srv://shakti1221:5a%23igLmDWtcFsGn@cluster0.qpuewaa.mongodb.net/service-center?retryWrites=true&w=majority
-
-# NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=metacontroller-dev-secret-key-2024
-
-# Google OAuth
-GOOGLE_CLIENT_ID=1020463452031-fekomab73gs54accfnemdpefkiqe6io4.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=GOCSPX-your-actual-secret-here
-```
+### Step 3mDWtcFsGn@cluster0.qpuewaa.mongodb.net/service-center?retryWrites=true&w=m
 
 ### Step 4: Verify Redirect URIs
 
